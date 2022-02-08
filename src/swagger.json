@@ -1,0 +1,162 @@
+{
+  "openapi":"3.0.0",
+  "info":{
+    "title":"Atlas Documentation",
+    "description":"Atlas api documentation",
+    "version":"1.0.0",
+    "contact":{
+      "email":"leandrofontellas@gmail.com"
+    }
+  },
+  "paths":{
+    "/users":{
+      "post":{
+        "tags":["User"],
+        "summary":"Create a user",
+        "description":"Create a new user",
+        "requestBody":{
+          "content":{
+            "application/json":{
+              "schema":{
+                "type":"object",
+                "properties":{
+                  "name":{
+                    "type":"string"
+                  },
+                  "description":{
+                    "type":"string"
+                  }
+                },
+                "example":{
+                  "name":"leandro",
+                  "email":"leandrofontellas@gmail.com"
+                }
+              }
+            }
+          }
+        },
+        "responses":{
+          "201":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "400":{
+            "description":"Email already taken"
+          }
+        }
+      },
+      "get":{
+        "tags":["User"],
+        "summary":"List all users",
+        "description":"Get all users, note that you need to be a admin to be able to do this",
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "type":"array",
+                  "items":{
+                    "$ref":"#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{userId}/admin":{
+      "patch":{
+        "tags":["User"],
+        "summary":"Make a user admin",
+        "description":"Make a user admin given its id",
+        "parameters":[{
+          "in":"path",
+          "name":"userId",
+          "required":true,
+          "description":"user id",
+          "schema":{
+            "type":"string"
+          }
+        }
+        ],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404":{
+            "description":"User not found"
+          }
+        }
+      }
+    },
+    "/users/{userId}":{
+      "get":{
+        "tags":["User"],
+        "summary":"Get a user",
+        "description":"Get a user info given its id",
+        "parameters":[{
+          "in":"path",
+          "name":"userId",
+          "required":true,
+          "description":"user id",
+          "schema":{
+            "type":"string"
+          }
+        }],
+        "responses":{
+          "200":{
+            "content":{
+              "application/json":{
+                "schema":{
+                  "$ref":"#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404":{
+            "description":"Not found"
+          }
+        }
+      }
+    }
+  },
+  "components":{
+    "schemas":{
+      "User":{
+        "type":"object",
+        "properties":{
+          "id":{
+            "type":"string"
+          },
+          "name":{
+            "type":"string"
+          },
+          "email":{
+            "type":"string"
+          },
+          "admin":{
+            "type":"boolean"
+          },
+          "created_at":{
+            "type":"string"
+          },
+          "updated_at":{
+            "type":"string"
+          }
+        }
+      }
+    }
+  }
+}
