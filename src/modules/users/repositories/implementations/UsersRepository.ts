@@ -4,13 +4,13 @@ import { IUsersRepository, ICreateUserDTO } from "../IUsersRepository";
 class UsersRepository implements IUsersRepository {
   private users: User[];
 
-  private static INSTANCE: UsersRepository;
+  private static INSTANCE: IUsersRepository;
 
   private constructor() {
     this.users = [];
   }
 
-  public static getInstance(): UsersRepository {
+  public static getInstance(): IUsersRepository {
     if (!UsersRepository.INSTANCE) {
       UsersRepository.INSTANCE = new UsersRepository();
     }
@@ -19,23 +19,45 @@ class UsersRepository implements IUsersRepository {
   }
 
   create({ name, email }: ICreateUserDTO): User {
-    // Complete aqui
+    const newUser = new User();
+    Object.assign(newUser, { name, email });
+    this.users.push(newUser);
+    return newUser;
   }
 
   findById(id: string): User | undefined {
-    // Complete aqui
+    const findUser = this.users.find((user) => user.id === id);
+
+    if (!findUser) {
+      return undefined;
+    }
+
+    return findUser;
   }
 
   findByEmail(email: string): User | undefined {
-    // Complete aqui
+    const findUser = this.users.find((user) => user.email === email);
+
+    if (!findUser) {
+      return undefined;
+    }
+
+    return findUser;
   }
 
   turnAdmin(receivedUser: User): User {
-    // Complete aqui
+    const userIndex = this.users.findIndex(
+      (user) => user.id === receivedUser.id
+    );
+
+    this.users[userIndex].admin = true;
+    this.users[userIndex].updated_at = new Date();
+
+    return receivedUser;
   }
 
   list(): User[] {
-    // Complete aqui
+    return this.users;
   }
 }
 
